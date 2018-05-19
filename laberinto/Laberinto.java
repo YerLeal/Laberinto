@@ -54,6 +54,7 @@ public class Laberinto extends Application {
         public void handle(MouseEvent event) {
             if (event.getSource() == canvas) {
                 logica.cambiarTipo((int)event.getX(), (int)event.getY(), gc);
+                logica.imprimirTipo((int)event.getX(), (int)event.getY());
             }
         }
         });
