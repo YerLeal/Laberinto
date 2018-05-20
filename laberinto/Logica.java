@@ -22,10 +22,15 @@ public class Logica {
     private int size;
     private Block maze[][];
     private BufferedImage image;
+    
 
     public Logica() {
         getDificultad();
         this.maze = new Block[WIDTH / size][HEIGHT / size];
+    }
+
+    public Block ini(){
+        return this.maze[0][0];
     }
 
     public void cambiarTipo(int x, int y, GraphicsContext gc) {
@@ -91,6 +96,7 @@ public class Logica {
             }
         }
         buscarNuevosCaminos();
+
     }
 
     private void getDificultad() {
@@ -143,7 +149,7 @@ public class Logica {
     private void buscarNuevosCaminos() {
         for (int i = 0; i < maze.length; i++) {
             for (int j = 0; j < maze[0].length; j++) {
-                caminos(i, j);
+                maze[i][j].setNext(caminos(i, j));
             }
         }
     }
