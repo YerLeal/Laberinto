@@ -35,11 +35,28 @@ public class Personaje extends Thread {
     Boolean flag = true;
     int cont = 0;
 
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
     @Override
     public void run() {
 
         while (flag) {
             direction = new Random().nextInt(4);
+            System.err.println(camino.get(cont).getNext().get(0).getX());
             if (next(direction)) {
 
                 switch (direction) {
@@ -130,6 +147,7 @@ public class Personaje extends Thread {
     }
 
     public void draw(GraphicsContext gc) {
+        
         gc.setFill(Color.AQUA);
         gc.fillRect(x, y, size, size);
     }

@@ -9,8 +9,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javax.imageio.ImageIO;
@@ -22,14 +24,13 @@ public class Logica {
     private int size;
     private Block maze[][];
     private BufferedImage image;
-    
 
     public Logica() {
         getDificultad();
         this.maze = new Block[WIDTH / size][HEIGHT / size];
     }
 
-    public Block ini(){
+    public Block ini() {
         return this.maze[0][0];
     }
 
@@ -42,11 +43,12 @@ public class Logica {
                     } else {
                         this.maze[i][j].setType("wall");
                     }
-                    this.maze[i][j].draw(gc);
+                    
                     break;
                 }
             }
         }
+        drawMaze(gc);
         buscarNuevosCaminos();
     }
 
@@ -96,8 +98,8 @@ public class Logica {
             }
         }
         buscarNuevosCaminos();
-
     }
+
 
     private void getDificultad() {
         int aux = (int) (Math.random() * (3 - 1) + 1);
@@ -116,30 +118,38 @@ public class Logica {
         }
     }
 
-    public void drawMaze(GraphicsContext gc) {
+    public void drawMaze(GraphicsContext gc){
+        //gc.clearRect(0, 0, WIDTH, HEIGHT);
         for (int i = 0; i < maze.length; i++) {
             for (int j = 0; j < maze[0].length; j++) {
-                maze[i][j].draw(gc);
+                                if (maze[i][j].getType().equals("wall")) {
+                    gc.drawImage(SwingFXUtils.toFXImage(maze[i][j].getImage(), null), i * size, j * size);
+                } else {
+                    gc.setFill(Color.WHITE);
+                    gc.fillRect(i * size, j * size, size, size);
+                }
             }
         }
+        
     }
+
 
     private ArrayList<Block> caminos(int x, int y) {
         ArrayList<Block> next = new ArrayList<>();
-        if (x + 1 < 5 && maze[x + 1][y].getType().equals("Floor")) {
-            System.err.println("E1");
+        if (x + 1 < maze.length && maze[x + 1][y].getType().equals("floor")) {
+
             next.add(maze[x + 1][y]);
         }
-        if (x - 1 > 0 && maze[x - 1][y].getType().equals("Floor")) {
-            System.err.println("E2");
+        if (x - 1 > 0 && maze[x - 1][y].getType().equals("floor")) {
+
             next.add(maze[x - 1][y]);
         }
-        if (y + 1 < 5 && maze[x][y + 1].getType().equals("Floor")) {
-            System.err.println("E3");
+        if (y + 1 < maze[0].length && maze[x][y + 1].getType().equals("floor")) {
+
             next.add(maze[x][y + 1]);
         }
-        if (y - 1 > 0 && maze[x][y - 1].getType().equals("Floor")) {
-            System.err.println("E4");
+        if (y - 1 > 0 && maze[x][y - 1].getType().equals("floor")) {
+
             next.add(maze[x][y - 1]);
         }
 

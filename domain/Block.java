@@ -51,20 +51,19 @@ public class Block {
         this.next = next;
     }
 
-    public void draw(GraphicsContext gc) {
-        if (this.type.equals("wall")) {
-            ImageView imageView = new ImageView(SwingFXUtils.toFXImage(image, null));
-            SnapshotParameters snapshot = new SnapshotParameters();
-            gc.drawImage(imageView.snapshot(snapshot, null), (x * size), (y * size));
-        } else {
-            gc.setFill(Color.WHITE);
-            gc.fillRect(x * size, y * size, size, size);
-        }
+    public BufferedImage getImage() {
+        return image;
     }
 
-    public boolean in(int xMouse, int yMouse) {
-        return (xMouse >= this.x * size && xMouse <= this.x * size + this.size) && (yMouse >= this.y * size && yMouse <= this.y * size + this.size);
+    public void setImage(BufferedImage image) {
+        this.image = image;
     }
+
+    
+    public boolean in(int xMouse, int yMouse) {
+
+        return (((xMouse >= this.x*size && xMouse < this.x*size + this.size)||(xMouse+size > this.x*size && xMouse+size < this.x*size + this.size)) && ((yMouse >= this.y*size && yMouse < this.y*size + this.size)||(yMouse+size >= this.y*size && yMouse+size < this.y*size + this.size)));
+    } // isClicked: retorna true si el botón fue clickeado y false si no
     
     public boolean isClicked(int xMouse, int yMouse) {
         if ((xMouse >= this.x * this.size && xMouse <= this.x * this.size + this.size)

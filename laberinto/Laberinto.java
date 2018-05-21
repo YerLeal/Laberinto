@@ -5,6 +5,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -13,10 +14,10 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-
 
 public class Laberinto extends Application implements Runnable {
 
@@ -30,6 +31,7 @@ public class Laberinto extends Application implements Runnable {
     private boolean bol = false;
     private Thread thread;
     private Personaje c1;
+
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Laberinto");
@@ -41,12 +43,13 @@ public class Laberinto extends Application implements Runnable {
             }
         });
         primaryStage.resizableProperty().set(false);
+
         primaryStage.show();
     } // start
 
     public void init(Stage primaryStage) {
         thread = new Thread(this);
-
+        thread.start();
         logica = new Logica();
         canvas = new Canvas(WIDTH, HEIGHT);
         Button button = new Button("verga");
@@ -54,10 +57,9 @@ public class Laberinto extends Application implements Runnable {
         button.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                c1=new Personaje(30, logica.ini());
+                c1 = new Personaje(30, logica.ini());
                 bol = true;
                 c1.start();
-                thread.start();
             }
         });
 
@@ -90,25 +92,35 @@ public class Laberinto extends Application implements Runnable {
         long start;
         long elapsed;
         long wait;
-        int fps = 30;
+        int fps = 60;
         long time = 1000 / fps;
         try {
             while (true) {
 
                 start = System.nanoTime();
-                elapsed = System.nanoTime() - start;
-                wait = time - elapsed / 1000000;
+                
 
+                if (bol) {
+                    draw(gc);
+                }
+               
+                elapsed=System.nanoTime()-start;
+                wait=time-elapsed/1000000;
+                if(wait<0) wait=5;
                 Thread.sleep(wait);
-                gc.clearRect(0, 0, 1360, 720);
-                c1.draw(gc);
-
-                logica.drawMaze(gc);
             }
+
         } catch (InterruptedException ex) {
             Logger.getLogger(Laberinto.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+    }
+
+    public void draw(GraphicsContext gc) throws InterruptedException {
+
+        logica.drawMaze(gc);
+        gc.setFill(Color.BLACK);
+        gc.fillRect(this.c1.getX(), this.c1.getY(), 30, 30);
     }
 
     public static void main(String[] args) {
