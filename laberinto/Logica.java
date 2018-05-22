@@ -33,6 +33,9 @@ public class Logica {
     public Block ini() {
         return this.maze[0][0];
     }
+        public Block ini3() {
+        return this.maze[3][0];
+    }
 
     public void cambiarTipo(int x, int y, GraphicsContext gc) {
         for (int i = 0; i < maze.length; i++) {
@@ -43,13 +46,16 @@ public class Logica {
                     } else {
                         this.maze[i][j].setType("wall");
                     }
-                    
+
                     break;
                 }
             }
         }
         drawMaze(gc);
         buscarNuevosCaminos();
+    }
+    public int getSize(){
+        return this.size;
     }
 
     public void imprimirTipo(int x, int y) {
@@ -100,7 +106,6 @@ public class Logica {
         buscarNuevosCaminos();
     }
 
-
     private void getDificultad() {
         int aux = (int) (Math.random() * (3 - 1) + 1);
         switch (aux) {
@@ -118,21 +123,23 @@ public class Logica {
         }
     }
 
-    public void drawMaze(GraphicsContext gc){
-        //gc.clearRect(0, 0, WIDTH, HEIGHT);
+    public void drawMaze(GraphicsContext gc) {
+
         for (int i = 0; i < maze.length; i++) {
             for (int j = 0; j < maze[0].length; j++) {
-                                if (maze[i][j].getType().equals("wall")) {
-                    gc.drawImage(SwingFXUtils.toFXImage(maze[i][j].getImage(), null), i * size, j * size);
+                if (maze[i][j].getType().equals("wall")) {
+                    gc.setFill(Color.BLACK);
+                    gc.fillRect(i * size, j * size, size, size);
+
                 } else {
                     gc.setFill(Color.WHITE);
                     gc.fillRect(i * size, j * size, size, size);
                 }
+
             }
         }
-        
-    }
 
+    }
 
     private ArrayList<Block> caminos(int x, int y) {
         ArrayList<Block> next = new ArrayList<>();
@@ -140,7 +147,7 @@ public class Logica {
 
             next.add(maze[x + 1][y]);
         }
-        if (x - 1 > 0 && maze[x - 1][y].getType().equals("floor")) {
+        if (x - 1 >= 0 && maze[x - 1][y].getType().equals("floor")) {
 
             next.add(maze[x - 1][y]);
         }
@@ -148,7 +155,7 @@ public class Logica {
 
             next.add(maze[x][y + 1]);
         }
-        if (y - 1 > 0 && maze[x][y - 1].getType().equals("floor")) {
+        if (y - 1 >= 0 && maze[x][y - 1].getType().equals("floor")) {
 
             next.add(maze[x][y - 1]);
         }
@@ -163,5 +170,4 @@ public class Logica {
             }
         }
     }
-
 }

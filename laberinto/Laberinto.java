@@ -5,7 +5,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -14,7 +13,6 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -31,7 +29,7 @@ public class Laberinto extends Application implements Runnable {
     private boolean bol = false;
     private Thread thread;
     private Personaje c1;
-
+    Personaje c2;
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Laberinto");
@@ -57,9 +55,11 @@ public class Laberinto extends Application implements Runnable {
         button.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                c1 = new Personaje(30, logica.ini());
+                c1 = new Personaje(logica.getSize(), logica.ini());
                 bol = true;
+                c2=new Personaje(logica.getSize(), logica.ini3());
                 c1.start();
+                c2.start();
             }
         });
 
@@ -98,15 +98,13 @@ public class Laberinto extends Application implements Runnable {
             while (true) {
 
                 start = System.nanoTime();
-                
+                elapsed = System.nanoTime() - start;
+                wait = time - elapsed / 1000000;
 
                 if (bol) {
                     draw(gc);
                 }
-               
-                elapsed=System.nanoTime()-start;
-                wait=time-elapsed/1000000;
-                if(wait<0) wait=5;
+
                 Thread.sleep(wait);
             }
 
@@ -117,10 +115,10 @@ public class Laberinto extends Application implements Runnable {
     }
 
     public void draw(GraphicsContext gc) throws InterruptedException {
-
+        gc.clearRect(0, 0, WIDTH, HEIGHT);
         logica.drawMaze(gc);
-        gc.setFill(Color.BLACK);
-        gc.fillRect(this.c1.getX(), this.c1.getY(), 30, 30);
+        c1.draw(gc);
+        c2.draw(gc);
     }
 
     public static void main(String[] args) {

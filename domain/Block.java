@@ -2,11 +2,6 @@ package domain;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import javafx.embed.swing.SwingFXUtils;
-import javafx.scene.SnapshotParameters;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.ImageView;
-import javafx.scene.paint.Color;
 
 public class Block {
 

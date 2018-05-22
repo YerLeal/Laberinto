@@ -56,52 +56,38 @@ public class Personaje extends Thread {
 
         while (flag) {
             direction = new Random().nextInt(4);
-            System.err.println(camino.get(cont).getNext().get(0).getX());
+            //System.err.println(camino.get(cont).getNext().get(0).getX());
             if (next(direction)) {
+                try {
+                    switch (direction) {
+                        case 0:
+                            while (this.camino.get(cont).in(x, y)) {
+                                y += 1;
+                                Thread.sleep(10);
+                            }
+                        case 1:
+                            while (this.camino.get(cont).in(x, y)) {
+                                x += 1;
+                                Thread.sleep(10);
+                            }
+                        case 2:
+                            while (this.camino.get(cont).in(x, y)) {
+                                y -= 1;
+                                Thread.sleep(10);
+                            }
+                        case 3:
+                            while (this.camino.get(cont).in(x, y)) {
+                                x -= 1;
+                                Thread.sleep(10);
+                            }
 
-                switch (direction) {
-                    case 0:
-                        while (this.camino.get(cont).in(x, y)) {
-                            y += 1;
-                            try {
-                                Thread.sleep(100);
-                            } catch (InterruptedException ex) {
-                                Logger.getLogger(Personaje.class.getName()).log(Level.SEVERE, null, ex);
-                            }
-                        }
-                    case 1:
-                        while (this.camino.get(cont).in(x, y)) {
-                            x += 1;
-                            try {
-                                Thread.sleep(100);
-                            } catch (InterruptedException ex) {
-                                Logger.getLogger(Personaje.class.getName()).log(Level.SEVERE, null, ex);
-                            }
-                        }
-                    case 2:
-                        while (this.camino.get(cont).in(x, y)) {
-                            y -= 1;
-                            try {
-                                Thread.sleep(100);
-                            } catch (InterruptedException ex) {
-                                Logger.getLogger(Personaje.class.getName()).log(Level.SEVERE, null, ex);
-                            }
-                        }
-                    case 3:
-                        while (this.camino.get(cont).in(x, y)) {
-                            x -= 1;
-                            try {
-                                Thread.sleep(100);
-                            } catch (InterruptedException ex) {
-                                Logger.getLogger(Personaje.class.getName()).log(Level.SEVERE, null, ex);
-                            }
-                        }
-
+                    }
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(Personaje.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 this.past.add(this.camino.get(cont));
                 cont++;
             }
-
         }
     }
 
@@ -147,7 +133,6 @@ public class Personaje extends Thread {
     }
 
     public void draw(GraphicsContext gc) {
-        
         gc.setFill(Color.AQUA);
         gc.fillRect(x, y, size, size);
     }
