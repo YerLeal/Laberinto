@@ -71,13 +71,14 @@ public class Laberinto extends Application implements Runnable {
                 size = logica.getSize();
                 c1 = new SmartCharacter(logica.getSize(), logica.ini(),buffer,0);
                 buffer.getCharacters().add(c1);
-//                c2 = new FuriousCharacter(logica.getSize(), logica.ini());
+                //c2 = new SmartCharacter(logica.getSize(), logica.ini2(),buffer,2);
                 c3 = new SmartCharacter(logica.getSize(), logica.ini3(),buffer,1);
                 buffer.getCharacters().add(c3);
+//                buffer.getCharacters().add(c2);
 //                i1 = new Item(logica.getSize(), maze[1][3]);
                 thread.start();
                 c1.start();
-//                c2.start();
+                //c2.start();
                 c3.start();
 //                i1.start();
                 
@@ -151,7 +152,7 @@ public class Laberinto extends Application implements Runnable {
             }
         }
         c1.draw(gc);
-//        c2.draw(gc);
+        //c2.draw(gc);
         c3.draw(gc);
 //        i1.draw(gc);
     }

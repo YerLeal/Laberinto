@@ -32,8 +32,9 @@ public class SmartCharacter extends Character {
                 try {
                     switch (direction) {
                         case 1:
-                            while (currentBlock.in(x, y)) {
+                            while (currentBlock.in(x, y)&& !crash) {
                                 y += 1;
+                                buff.comparator(order);
                                 Thread.sleep(speed);
                             }
                             break;
@@ -41,14 +42,13 @@ public class SmartCharacter extends Character {
                             while (currentBlock.in(x, y) && !crash) {
                                 x += 1;
                                 buff.comparator(order);
- 
-                                    Thread.sleep(speed);
-                                
+                                Thread.sleep(speed);
                             }
                             break;
                         case 3:
-                            while (currentBlock.in(x, y)) {
+                            while (currentBlock.in(x, y) && !crash) {
                                 y -= 1;
+                                buff.comparator(order);
                                 Thread.sleep(speed);
                             }
                             break;
@@ -56,9 +56,7 @@ public class SmartCharacter extends Character {
                             while (currentBlock.in(x, y) && !crash) {
                                 x -= 1;
                                 buff.comparator(order);
-
-                                    Thread.sleep(speed);
-                                
+                                Thread.sleep(speed);
                             }
                             break;
 

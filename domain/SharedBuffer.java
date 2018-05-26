@@ -43,10 +43,19 @@ public class SharedBuffer {
                 default:
                     break;
             } // switch
+            boolean cosa=false;
+            if(direccion==1 && characters.get(i).direction==3){
+                cosa=true;
+            }else if(direccion==3 && characters.get(i).direction==1){
+                cosa=true;
+            }else if(direccion==2 && characters.get(i).direction==4){
+                cosa=true;
+            }else if(direccion==4 && characters.get(i).direction==2){
+                cosa=true;
+            }
             
-            
-            if (direccion!=characters.get(i).direction && characters.get(order).getX() == xColision && (int) characters.get(order).getY() == yColision) {
-//                System.err.println(order);
+            if (cosa && characters.get(order).getX() == xColision && (int) characters.get(order).getY() == yColision) {
+//              System.err.println(order);
                 characters.get(i).crash=true;
                 characters.get(order).crash=true;
                 

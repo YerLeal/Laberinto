@@ -33,8 +33,13 @@ public class Logica {
     public Block ini() {
         return this.maze[0][0];
     }
-        public Block ini3() {
-        return this.maze[7][0];
+
+    public Block ini3() {
+        return this.maze[5][0];
+    }
+
+    public Block ini2() {
+        return this.maze[0][5];
     }
 
     public void cambiarTipo(int x, int y, GraphicsContext gc) {
@@ -54,7 +59,8 @@ public class Logica {
         drawMaze(gc);
         buscarNuevosCaminos();
     }
-    public int getSize(){
+
+    public int getSize() {
         return this.size;
     }
 
@@ -94,11 +100,11 @@ public class Logica {
     public void createMaze() {
         for (int i = 0; i < maze.length; i++) {
             for (int j = 0; j < maze[0].length; j++) {
-               
+
                 if ((i + j) % 2 == 0) {
-                    maze[i][j] = new Block( i, j, size, "wall");
+                    maze[i][j] = new Block(i, j, size, "wall");
                 } else {
-                    maze[i][j] = new Block( i, j, size, "floor");
+                    maze[i][j] = new Block(i, j, size, "floor");
                 }
             }
         }
@@ -139,7 +145,8 @@ public class Logica {
         }
 
     }
-    public Block[][] getMaze(){
+
+    public Block[][] getMaze() {
         return this.maze;
     }
 

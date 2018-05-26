@@ -65,6 +65,9 @@ public abstract class Character extends Thread {
             System.err.println("Entra?");
             return false;
         }
+        if(crash && dir==dirAux){
+            return false;
+        }
         int aux;
         if (dir == 1 || dir == 2) {
             aux = 1;
