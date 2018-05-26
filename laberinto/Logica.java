@@ -34,7 +34,7 @@ public class Logica {
         return this.maze[0][0];
     }
         public Block ini3() {
-        return this.maze[3][0];
+        return this.maze[7][0];
     }
 
     public void cambiarTipo(int x, int y, GraphicsContext gc) {
@@ -92,14 +92,13 @@ public class Logica {
     }
 
     public void createMaze() {
-        BufferedImage aux;
         for (int i = 0; i < maze.length; i++) {
             for (int j = 0; j < maze[0].length; j++) {
-                aux = this.image.getSubimage((i * size), (j * size), size, size);
+               
                 if ((i + j) % 2 == 0) {
-                    maze[i][j] = new Block(aux, i, j, size, "wall");
+                    maze[i][j] = new Block( i, j, size, "wall");
                 } else {
-                    maze[i][j] = new Block(aux, i, j, size, "floor");
+                    maze[i][j] = new Block( i, j, size, "floor");
                 }
             }
         }
@@ -139,6 +138,9 @@ public class Logica {
             }
         }
 
+    }
+    public Block[][] getMaze(){
+        return this.maze;
     }
 
     private ArrayList<Block> caminos(int x, int y) {

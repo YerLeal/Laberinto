@@ -1,6 +1,13 @@
 package laberinto;
 
-import domain.Personaje;
+import domain.Block;
+import domain.FastCharacter;
+import domain.FuriousCharacter;
+import domain.Character;
+import domain.Item;
+import domain.SharedBuffer;
+import domain.SmartCharacter;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Application;
@@ -13,6 +20,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -28,8 +36,11 @@ public class Laberinto extends Application implements Runnable {
     private Logica logica;
     private boolean bol = false;
     private Thread thread;
-    private Personaje c1;
-    Personaje c2;
+    private Character c1,c2,c3;
+    private Item i1;
+    Block[][] maze;
+    int size;
+
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Laberinto");
@@ -44,10 +55,10 @@ public class Laberinto extends Application implements Runnable {
 
         primaryStage.show();
     } // start
-
+    private SharedBuffer buffer=new SharedBuffer(new ArrayList<>());
     public void init(Stage primaryStage) {
         thread = new Thread(this);
-        thread.start();
+        
         logica = new Logica();
         canvas = new Canvas(WIDTH, HEIGHT);
         Button button = new Button("verga");
@@ -55,11 +66,22 @@ public class Laberinto extends Application implements Runnable {
         button.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                c1 = new Personaje(logica.getSize(), logica.ini());
-                bol = true;
-                c2=new Personaje(logica.getSize(), logica.ini3());
+                
+                maze = logica.getMaze();
+                size = logica.getSize();
+                c1 = new SmartCharacter(logica.getSize(), logica.ini(),buffer,0);
+                buffer.getCharacters().add(c1);
+//                c2 = new FuriousCharacter(logica.getSize(), logica.ini());
+                c3 = new SmartCharacter(logica.getSize(), logica.ini3(),buffer,1);
+                buffer.getCharacters().add(c3);
+//                i1 = new Item(logica.getSize(), maze[1][3]);
+                thread.start();
                 c1.start();
-                c2.start();
+//                c2.start();
+                c3.start();
+//                i1.start();
+                
+                
             }
         });
 
@@ -92,7 +114,7 @@ public class Laberinto extends Application implements Runnable {
         long start;
         long elapsed;
         long wait;
-        int fps = 60;
+        int fps = 30;
         long time = 1000 / fps;
         try {
             while (true) {
@@ -101,10 +123,8 @@ public class Laberinto extends Application implements Runnable {
                 elapsed = System.nanoTime() - start;
                 wait = time - elapsed / 1000000;
 
-                if (bol) {
                     draw(gc);
-                }
-
+                
                 Thread.sleep(wait);
             }
 
@@ -115,10 +135,25 @@ public class Laberinto extends Application implements Runnable {
     }
 
     public void draw(GraphicsContext gc) throws InterruptedException {
+        
         gc.clearRect(0, 0, WIDTH, HEIGHT);
-        logica.drawMaze(gc);
+        for (int i = 0; i < maze.length; i++) {
+            for (int j = 0; j < maze[0].length; j++) {
+                if (maze[i][j].getType().equals("wall")) {
+                    gc.setFill(Color.BLACK);
+                    gc.fillRect(i * size, j * size, size, size);
+
+                } else {
+                    gc.setFill(Color.WHITE);
+                    gc.fillRect(i * size, j * size, size, size);
+                }
+
+            }
+        }
         c1.draw(gc);
-        c2.draw(gc);
+//        c2.draw(gc);
+        c3.draw(gc);
+//        i1.draw(gc);
     }
 
     public static void main(String[] args) {

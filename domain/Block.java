@@ -1,17 +1,18 @@
 package domain;
 
 import java.awt.image.BufferedImage;
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Block {
+public class Block implements Serializable {
 
     private int x, y, size;
     private String type;
     private ArrayList<Block> next;
-    private BufferedImage image;
+//    private BufferedImage image;
 
-    public Block(BufferedImage image, int x, int y, int size, String type) {
-        this.image = image;
+    public Block(int x, int y, int size, String type) {
+//        this.image = image;
         this.x = x;
         this.y = y;
         this.size = size;
@@ -46,20 +47,18 @@ public class Block {
         this.next = next;
     }
 
-    public BufferedImage getImage() {
-        return image;
-    }
-
-    public void setImage(BufferedImage image) {
-        this.image = image;
-    }
-
-    
+//    public BufferedImage getImage() {
+//        return image;
+//    }
+//
+//    public void setImage(BufferedImage image) {
+//        this.image = image;
+//    }
     public boolean in(int xMouse, int yMouse) {
 
-        return (((xMouse >= this.x*size && xMouse < this.x*size + this.size)||(xMouse+size > this.x*size && xMouse+size < this.x*size + this.size)) && ((yMouse >= this.y*size && yMouse < this.y*size + this.size)||(yMouse+size >= this.y*size && yMouse+size < this.y*size + this.size)));
+        return (((xMouse >= this.x * size && xMouse < this.x * size + this.size) || (xMouse + size > this.x * size && xMouse + size < this.x * size + this.size)) && ((yMouse >= this.y * size && yMouse < this.y * size + this.size) || (yMouse + size >= this.y * size && yMouse + size < this.y * size + this.size)));
     } // isClicked: retorna true si el botón fue clickeado y false si no
-    
+
     public boolean isClicked(int xMouse, int yMouse) {
         if ((xMouse >= this.x * this.size && xMouse <= this.x * this.size + this.size)
                 && (yMouse >= this.y * this.size && yMouse <= this.y * this.size + this.size)) {
