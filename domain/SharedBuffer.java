@@ -6,6 +6,7 @@
 package domain;
 
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 
 /**
@@ -21,41 +22,15 @@ public class SharedBuffer {
     
     public synchronized void comparator(int order){
         int size=characters.get(0).size;
-        int xColision, yColision;
-        int direccion=0;
+        int xC, yC,xMe,yMe;
+        xMe=characters.get(order).getX();
+        yMe=characters.get(order).getY();
+        Rectangle yo=new Rectangle(xMe, yMe, size, size);
         for (int i = 0; i < characters.size(); i++) {
-            xColision = (int) characters.get(i).getX();
-            yColision = (int) characters.get(i).getY();
-            direccion=characters.get(order).direction;
-            switch (direccion) {
-                case 3:
-                    yColision += size;
-                    break;
-                case 1:
-                    yColision -= size;
-                    break;
-                case 2:
-                    xColision -= size;
-                    break;
-                case 4:
-                    xColision += size;
-                    break;
-                default:
-                    break;
-            } // switch
-            boolean cosa=false;
-            if(direccion==1 && characters.get(i).direction==3){
-                cosa=true;
-            }else if(direccion==3 && characters.get(i).direction==1){
-                cosa=true;
-            }else if(direccion==2 && characters.get(i).direction==4){
-                cosa=true;
-            }else if(direccion==4 && characters.get(i).direction==2){
-                cosa=true;
-            }
-            
-            if (cosa && characters.get(order).getX() == xColision && (int) characters.get(order).getY() == yColision) {
-//              System.err.println(order);
+            xC=characters.get(i).getX();
+            yC=characters.get(i).getY();
+            Rectangle elOtro=new Rectangle(xC, yC, size, size);
+            if (i!=order && elOtro.intersects(yo)) {
                 characters.get(i).crash=true;
                 characters.get(order).crash=true;
                 

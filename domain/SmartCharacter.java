@@ -32,7 +32,7 @@ public class SmartCharacter extends Character {
                 try {
                     switch (direction) {
                         case 1:
-                            while (currentBlock.in(x, y)&& !crash) {
+                            while (currentBlock.in(x, y) && !crash) {
                                 y += 1;
                                 buff.comparator(order);
                                 Thread.sleep(speed);
@@ -59,7 +59,6 @@ public class SmartCharacter extends Character {
                                 Thread.sleep(speed);
                             }
                             break;
-
                     }
                 } catch (InterruptedException ex) {
                     Logger.getLogger(Character.class
@@ -72,6 +71,6 @@ public class SmartCharacter extends Character {
 
     @Override
     public void draw(GraphicsContext gc) {
-        gc.drawImage(new Image("/assets/luigi2.png"), x, y, size, size);
+        gc.drawImage(new Image("/assets/luigi2.png"), x, y, (size-20), size);
     }
 }

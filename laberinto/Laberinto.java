@@ -92,7 +92,7 @@ public class Laberinto extends Application implements Runnable {
         pane = new Pane(canvas);
         pane.getChildren().add(button);
 
-        logica.selectImage(primaryStage, gc, fileChooserImage, canvas);
+//        logica.selectImage(primaryStage, gc, fileChooserImage, canvas);
         logica.createMaze();
         logica.drawMaze(gc);
 
