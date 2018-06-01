@@ -7,8 +7,6 @@ package domain;
 
 import java.awt.Rectangle;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -48,7 +46,6 @@ public class SharedBuffer {
             xC = characters.get(i).getX();
             yC = characters.get(i).getY();
             dirO = characters.get(i).direction;
-            
             Rectangle elOtro = new Rectangle(xC, yC, size, size);
             if (i != order && elOtro.intersects(yo) && characters.get(i).getFlag()) {
                 if (characters.get(order).oposDir(dirMe) == dirO ) {
@@ -61,13 +58,10 @@ public class SharedBuffer {
                     } else if(characters.get(i).crash && characters.get(order).crash){
                             characters.get(i).crash = false;
                         characters.get(order).crash = false;
-                    
                     }else {
                         characters.get(order).crash = true;
                         characters.get(i).crash = true;
-
                     }
-
                     return true;
                 } else {
                     System.err.println("otro" + order);
@@ -75,7 +69,6 @@ public class SharedBuffer {
                     return true;
                 }
             }
-
         } //for
         characters.get(order).movement = 1;
         return false;

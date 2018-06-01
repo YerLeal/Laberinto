@@ -24,12 +24,9 @@ public class SmartCharacter extends Character {
 
     @Override
     public void run() {
-        //new Thread(veri).start();
         while (super.getFlag()) {
             direction = (int) (Math.random() * (5 - 1) + 1);
-
             if (next(direction)) {
-//                System.err.println("Direction:"+direction+"Hilo:"+order);
                 crash = false;
                 try {
                     switch (direction) {
@@ -39,7 +36,6 @@ public class SmartCharacter extends Character {
                                 Thread.sleep(speed);
                                 buff.colisionVs(order);
                                 y += movement;
-                                   
                             }
                             break;
                         case 2:
@@ -48,8 +44,6 @@ public class SmartCharacter extends Character {
                                 Thread.sleep(speed);
                                 buff.colisionVs(order);
                                 x += movement;
-                                
-                                
                             }
                             break;
                         case 3:
@@ -57,9 +51,7 @@ public class SmartCharacter extends Character {
                                 System.err.println("Speed:"+speed);
                                 Thread.sleep(speed);
                                 buff.colisionVs(order);
-                                y -= movement;
-                                
-                                
+                                y -= movement;   
                             }
                             break;
                         case 4:
@@ -68,8 +60,6 @@ public class SmartCharacter extends Character {
                                 Thread.sleep(speed);
                                 buff.colisionVs(order);
                                 x -= movement;
-                                
-                                
                             }
                             break;
                     }
@@ -87,8 +77,6 @@ public class SmartCharacter extends Character {
                         Logger.getLogger(SmartCharacter.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
-                    
-                
             }
         }
     }
