@@ -27,6 +27,7 @@ import javafx.stage.WindowEvent;
 
 public class Laberinto extends Application implements Runnable {
 
+    private ArrayList<Character> lista = new ArrayList<>();
     private final int WIDTH = 1360;
     private final int HEIGHT = 720;
     private Canvas canvas;
@@ -36,10 +37,25 @@ public class Laberinto extends Application implements Runnable {
     private Logica logica;
     private boolean bol = false;
     private Thread thread;
-    private Character c1,c2,c3;
+    private Character c1, c2, c3;
     private Item i1;
     Block[][] maze;
     int size;
+    private Runnable hilos = new Runnable() {
+        @Override
+        public void run() {
+            for (int i = 0; i < lista.size(); i++) {
+
+                try {
+                    buffer.getCharacters().add(lista.get(i));
+                    lista.get(i).start();
+                    Thread.sleep(2000);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(Laberinto.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+    };
 
     @Override
     public void start(Stage primaryStage) {
@@ -55,10 +71,11 @@ public class Laberinto extends Application implements Runnable {
 
         primaryStage.show();
     } // start
-    private SharedBuffer buffer=new SharedBuffer(new ArrayList<>());
+    private SharedBuffer buffer = new SharedBuffer(new ArrayList<>(), new ArrayList<>());
+
     public void init(Stage primaryStage) {
         thread = new Thread(this);
-        
+
         logica = new Logica();
         canvas = new Canvas(WIDTH, HEIGHT);
         Button button = new Button("verga");
@@ -66,23 +83,26 @@ public class Laberinto extends Application implements Runnable {
         button.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                
+
                 maze = logica.getMaze();
                 size = logica.getSize();
-                c1 = new SmartCharacter(logica.getSize(), logica.ini(),buffer,0);
-                buffer.getCharacters().add(c1);
-                //c2 = new SmartCharacter(logica.getSize(), logica.ini2(),buffer,2);
-                c3 = new SmartCharacter(logica.getSize(), logica.ini3(),buffer,1);
-                buffer.getCharacters().add(c3);
-//                buffer.getCharacters().add(c2);
-//                i1 = new Item(logica.getSize(), maze[1][3]);
+                c1 = new FastCharacter(logica.getSize(), logica.ini(), buffer, 0);
+                for (int i = 0; i < 5; i++) {
+                    System.err.println("lista" + i);
+                    if (i < 2) {
+                        lista.add(new SmartCharacter(logica.getSize(), logica.ini(), buffer, i));
+
+                    } else if (i < 4) {
+                        lista.add(new FastCharacter(logica.getSize(), logica.ini(), buffer, i));
+                    } else {
+                        lista.add(new FuriousCharacter(logica.getSize(), logica.ini(), buffer, i));
+                    }
+
+                }
+
                 thread.start();
-                c1.start();
-                //c2.start();
-                c3.start();
-//                i1.start();
-                
-                
+                new Thread(hilos).start();
+
             }
         });
 
@@ -124,8 +144,8 @@ public class Laberinto extends Application implements Runnable {
                 elapsed = System.nanoTime() - start;
                 wait = time - elapsed / 1000000;
 
-                    draw(gc);
-                
+                draw(gc);
+
                 Thread.sleep(wait);
             }
 
@@ -136,7 +156,7 @@ public class Laberinto extends Application implements Runnable {
     }
 
     public void draw(GraphicsContext gc) throws InterruptedException {
-        
+
         gc.clearRect(0, 0, WIDTH, HEIGHT);
         for (int i = 0; i < maze.length; i++) {
             for (int j = 0; j < maze[0].length; j++) {
@@ -151,10 +171,10 @@ public class Laberinto extends Application implements Runnable {
 
             }
         }
-        c1.draw(gc);
-        //c2.draw(gc);
-        c3.draw(gc);
-//        i1.draw(gc);
+        for(int i=0;i<lista.size();i++){
+            lista.get(i).draw(gc);
+        }
+
     }
 
     public static void main(String[] args) {

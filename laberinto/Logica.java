@@ -31,15 +31,15 @@ public class Logica {
     }
 
     public Block ini() {
-        return this.maze[0][0];
+        return this.maze[0][5];
     }
 
     public Block ini3() {
-        return this.maze[5][0];
+        return this.maze[3][0];
     }
 
     public Block ini2() {
-        return this.maze[0][5];
+        return this.maze[5][0];
     }
 
     public void cambiarTipo(int x, int y, GraphicsContext gc) {
@@ -112,7 +112,7 @@ public class Logica {
     }
 
     private void getDificultad() {
-        int aux = (int) (Math.random() * (3 - 1) + 1);
+        int aux = 2;
         switch (aux) {
             case 1:
                 size = 120;
