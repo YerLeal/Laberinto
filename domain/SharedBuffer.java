@@ -15,10 +15,10 @@ import java.util.ArrayList;
 public class SharedBuffer {
 
     private ArrayList<Character> characters;
-    private ArrayList<Item> items;
+//    private ArrayList<Item> items;
     
-    public SharedBuffer(ArrayList<Character> characters,ArrayList<Item> items) {
-        this.items=items;
+    public SharedBuffer(ArrayList<Character> characters) {
+//        this.items=items;
         this.characters = characters;
     }
 
@@ -78,48 +78,48 @@ public class SharedBuffer {
         return characters;
     }
     
-    public synchronized void itemColision(int order){
-        int size = characters.get(0).size;
-        int xC, yC, xMe, yMe;
-        int dirMe = items.get(order).direction;
-        xMe = items.get(order).getX();
-        yMe = items.get(order).getY();
-        int aux;
-        if (dirMe == 1 || dirMe == 2) {
-            aux = 10;
-        } else {
-            aux = -10;
-        }
-
-        if (dirMe == 1 || dirMe == 3) {
-            yMe += aux;
-        } else {
-            xMe += aux;
-        }
-        Rectangle yo = new Rectangle(xMe, yMe, size, size);
-        for (int i = 0; i < characters.size(); i++) {
-            xC = characters.get(i).getX();
-            yC = characters.get(i).getY();
-            Rectangle elOtro = new Rectangle(xC, yC, size, size);
-            if ( elOtro.intersects(yo)) {
-                System.out.println("Entra?");
-                if(characters.get(i).getTipo().equals("S")){  
-                    characters.get(i).speed-=1;
-                    items.get(order).setFlag(false);
-                }else if(characters.get(i).getTipo().equals("F")){
-                    items.get(order).setFlag(false);
-                }
-            }
-        }
-    }
+//    public synchronized void itemColision(int order){
+//        int size = characters.get(0).size;
+//        int xC, yC, xMe, yMe;
+//        int dirMe = items.get(order).direction;
+//        xMe = items.get(order).getX();
+//        yMe = items.get(order).getY();
+//        int aux;
+//        if (dirMe == 1 || dirMe == 2) {
+//            aux = 10;
+//        } else {
+//            aux = -10;
+//        }
+//
+//        if (dirMe == 1 || dirMe == 3) {
+//            yMe += aux;
+//        } else {
+//            xMe += aux;
+//        }
+//        Rectangle yo = new Rectangle(xMe, yMe, size, size);
+//        for (int i = 0; i < characters.size(); i++) {
+//            xC = characters.get(i).getX();
+//            yC = characters.get(i).getY();
+//            Rectangle elOtro = new Rectangle(xC, yC, size, size);
+//            if ( elOtro.intersects(yo)) {
+//                System.out.println("Entra?");
+//                if(characters.get(i).getTipo().equals("S")){  
+//                    characters.get(i).speed-=1;
+//                    items.get(order).setFlag(false);
+//                }else if(characters.get(i).getTipo().equals("F")){
+//                    items.get(order).setFlag(false);
+//                }
+//            }
+//        }
+//    }
 
     public void setCharacters(ArrayList<Character> characters) {
         this.characters = characters;
     }
 
-    public ArrayList<Item> getItems() {
-        return items;
-    }
+//    public ArrayList<Item> getItems() {
+//        return items;
+//    }
     
 
 }

@@ -15,11 +15,12 @@ import javafx.scene.paint.Color;
  * @author maikel
  */
 public class SmartCharacter extends Character {
-    
-    public SmartCharacter(int size, Block start, SharedBuffer buffer, int order) {
-        super(size, start, buffer, order);
+
+    public SmartCharacter(int size, int i, int j, Block[][] start, SharedBuffer buffer, int order) {
+        super(size, i, j, start, buffer, order);
         super.speed = 6;
-        super.tipo="S";
+        super.tipo = "S";
+
     }
 
     @Override
@@ -28,38 +29,41 @@ public class SmartCharacter extends Character {
             direction = (int) (Math.random() * (5 - 1) + 1);
             if (next(direction)) {
                 crash = false;
+                int pixels = 0;
                 try {
                     switch (direction) {
                         case 1:
-                            while (currentBlock.in(x, y) && !crash) {
-                                System.err.println("Speed:"+speed);
+                            while (pixels < size && !crash) {
                                 Thread.sleep(speed);
-                                buff.colisionVs(order);
+                                //buff.colisionVs(order);
                                 y += movement;
+                                pixels++;
                             }
                             break;
                         case 2:
-                            while (currentBlock.in(x, y) && !crash) {
-                               System.err.println("Speed:"+speed);
+                            while (pixels < size && !crash) {
                                 Thread.sleep(speed);
-                                buff.colisionVs(order);
+                                //    buff.colisionVs(order);
                                 x += movement;
+                                pixels++;
                             }
                             break;
                         case 3:
-                            while (currentBlock.in(x, y) && !crash) {
-                                System.err.println("Speed:"+speed);
+                            while (pixels < size && !crash) {
+                                System.err.println("Speed:" + speed);
                                 Thread.sleep(speed);
-                                buff.colisionVs(order);
-                                y -= movement;   
+                                //buff.colisionVs(order);
+                                y -= movement;
+                                pixels++;
                             }
                             break;
                         case 4:
-                            while (currentBlock.in(x, y) && !crash) {
-                                System.err.println("Speed:"+speed);
+                            while (pixels < size && !crash) {
+                                System.err.println("Speed:" + speed);
                                 Thread.sleep(speed);
-                                buff.colisionVs(order);
+                                //buff.colisionVs(order);
                                 x -= movement;
+                                pixels++;
                             }
                             break;
                     }
@@ -67,15 +71,8 @@ public class SmartCharacter extends Character {
                     Logger.getLogger(Character.class
                             .getName()).log(Level.SEVERE, null, ex);
                 }
-                if(!crash){
+                if (!crash) {
                     metodoRandom(direction);
-                    currentBlock = nextBlock;
-                }else{
-                    try {
-                        rePos();
-                    } catch (InterruptedException ex) {
-                        Logger.getLogger(SmartCharacter.class.getName()).log(Level.SEVERE, null, ex);
-                    }
                 }
             }
         }
@@ -97,7 +94,7 @@ public class SmartCharacter extends Character {
                 gc.setFill(Color.BLUE);
                 break;
         }
-        
+
         gc.fillRect(x, y, size, size);
     }
 }

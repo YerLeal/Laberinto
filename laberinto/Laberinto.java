@@ -1,12 +1,13 @@
 package laberinto;
 
 import domain.Block;
-import domain.FastCharacter;
-import domain.FuriousCharacter;
+//import domain.FastCharacter;
+//import domain.FuriousCharacter;
 import domain.Character;
-import domain.Item;
+//import domain.Item;
 import domain.SharedBuffer;
 import domain.SmartCharacter;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -38,7 +39,7 @@ public class Laberinto extends Application implements Runnable {
     private boolean bol = false;
     private Thread thread;
     private Character c1, c2, c3;
-    private Item i1;
+//    private Item i1;
     Block[][] maze;
     int size;
     private Runnable hilos = new Runnable() {
@@ -71,11 +72,15 @@ public class Laberinto extends Application implements Runnable {
 
         primaryStage.show();
     } // start
-    private SharedBuffer buffer = new SharedBuffer(new ArrayList<>(), new ArrayList<>());
+    private SharedBuffer buffer = new SharedBuffer(new ArrayList<>());
 
     public void init(Stage primaryStage) {
         thread = new Thread(this);
-
+//        Rectangle r=new Rectangle(0, 1, 20, 20);
+//        Rectangle r1=new Rectangle(0*20, 1*20, 20, 20);
+//        if(r1.intersects(r)){
+//            System.err.println("KK");
+//        }
         logica = new Logica();
         canvas = new Canvas(WIDTH, HEIGHT);
         Button button = new Button("verga");
@@ -86,22 +91,23 @@ public class Laberinto extends Application implements Runnable {
 
                 maze = logica.getMaze();
                 size = logica.getSize();
-                c1 = new FastCharacter(logica.getSize(), logica.ini(), buffer, 0);
-                for (int i = 0; i < 5; i++) {
-                    System.err.println("lista" + i);
-                    if (i < 2) {
-                        lista.add(new SmartCharacter(logica.getSize(), logica.ini(), buffer, i));
-
-                    } else if (i < 4) {
-                        lista.add(new FastCharacter(logica.getSize(), logica.ini(), buffer, i));
-                    } else {
-                        lista.add(new FuriousCharacter(logica.getSize(), logica.ini(), buffer, i));
-                    }
-
-                }
+                c1 = new SmartCharacter(logica.getSize(),1,1, maze, buffer, 0);
+//                for (int i = 0; i < 10; i++) {
+//                    System.err.println("lista" + i);
+//                    if (i < 2) {
+//                        lista.add(new SmartCharacter(logica.getSize(), logica.ini(), buffer, i));
+//
+//                    } else if (i < 4) {
+//                        lista.add(new FastCharacter(logica.getSize(), logica.ini(), buffer, i));
+//                    } else {
+//                        lista.add(new FuriousCharacter(logica.getSize(), logica.ini(), buffer, i));
+//                    }
+//
+//                }
 
                 thread.start();
-                new Thread(hilos).start();
+                c1.start();
+//                new Thread(hilos).start();
 
             }
         });
@@ -171,9 +177,10 @@ public class Laberinto extends Application implements Runnable {
 
             }
         }
-        for(int i=0;i<lista.size();i++){
-            lista.get(i).draw(gc);
-        }
+//        for(int i=0;i<lista.size();i++){
+//            lista.get(i).draw(gc);
+//        }
+    c1.draw(gc);
 
     }
 

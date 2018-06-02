@@ -15,21 +15,24 @@ import javafx.scene.canvas.GraphicsContext;
 public abstract class Character extends Thread {
 
     protected SharedBuffer buff;
-    protected int xPos, yPos, x, y, size, speed,movement, order;
-    protected Block currentBlock, nextBlock;
+    protected int xPos, yPos, x, y, size, speed, order;
+    protected Block[][] matrixBlock;
     protected int direction, dirAux;
-    protected boolean crash,wai = false;
+    protected boolean crash, wai = false;
     protected String tipo;
-    public Character(int size, Block start, SharedBuffer buffer, int order) {
-        xPos = start.getX();
-        yPos = start.getY();
+    public int movement = 1;
+
+    public Character(int size, int i, int j, Block[][] start, SharedBuffer buffer, int order) {
+        xPos = j;
+        yPos = i;
         x = xPos * size;
         y = yPos * size;
         this.size = size;
-        this.currentBlock = start;
+        this.matrixBlock = start;
         this.buff = buffer;
         this.order = order;
     }
+
     private Boolean flag = true;
 
     public Boolean getFlag() {
@@ -64,6 +67,7 @@ public abstract class Character extends Thread {
         this.y = y;
     }
 
+    //selecciona la siguiente posición
     public boolean next(int dir) {
 
         if (((dir == 1 && dirAux == 3) || (dirAux == 1 && dir == 3)) && !encerrado() && !crash) {
@@ -74,36 +78,33 @@ public abstract class Character extends Thread {
         if (crash && dir == dirAux) {
             return false;
         }
-//        System.err.println(currentBlock.getX() + " " + currentBlock.getY() + " " + order);
         int aux;
         if (dir == 1 || dir == 2) {
             aux = 1;
         } else {
             aux = -1;
         }
-
+        int xMe = x;
+        int yMe = y;
         if (dir == 1 || dir == 3) {
-            for (int i = 0; i < this.currentBlock.getNext().size(); i++) {
-                if (this.currentBlock.getNext().get(i).getY() == yPos + aux) {
-                    this.nextBlock = this.currentBlock.getNext().get(i);
-                    return true;
-
-                }
-            }
+            yMe += aux;
         } else {
-            for (int i = 0; i < this.currentBlock.getNext().size(); i++) {
-                if (this.currentBlock.getNext().get(i).getX() == xPos + aux) {
-
-                    this.nextBlock = this.currentBlock.getNext().get(i);
-                    return true;
-
+            xMe += aux;
+        }
+        if (xMe < 0 || xMe + size > 1360 || yMe < 0 || yMe + size > 720) {
+            return false;
+        }
+        Rectangle me = new Rectangle(xMe, yMe, size, size);
+        for (int i = 0; i < matrixBlock.length; i++) {
+            for (int j = 0; j < this.matrixBlock[0].length; j++) {
+                Rectangle other = new Rectangle(i * size, j * size, size, size);
+                if (other.intersects(me) && matrixBlock[i][j].getType().equalsIgnoreCase("wall")) {
+                    return false;
                 }
             }
         }
-
-        return false;
+        return true;
     }
-    
 
     public void metodoRandom(int dir) {
         int aux;
@@ -123,22 +124,51 @@ public abstract class Character extends Thread {
 
     public boolean encerrado() {
         int dir = oposDir(dirAux);
-        int aux;
-        if (dir == 1 || dir == 2) {
-            aux = 1;
-        } else {
-            aux = -1;
-        }
+        boolean up = true, down = true, left = true, right = true;
+        int xMe = x;
+        int yMe = y;
 
-        if (this.currentBlock.getNext().size() == 1) {
-            if ((dir == 1 || dir == 3) && this.currentBlock.getNext().get(0).getY() == yPos + aux) {
-                direction = dir;
-            } else if ((dir == 2 || dir == 4) && this.currentBlock.getNext().get(0).getX() == xPos + aux) {
-                direction = dir;
-            }
-            return true;
+        if (xMe < 0 || xMe + size > 1360 || yMe < 0 || yMe + 1 + size > 720) {
+            up = false;
+        } else if (xMe < 0 || xMe + size > 1360 || yMe - 1 < 0 || yMe + size > 720) {
+            down = false;
+        } else if (xMe < 0 || xMe + size + 1 > 1360 || yMe < 0 || yMe + size > 720) {
+            right = false;
+        } else if (xMe - 1 < 0 || xMe + size > 1360 || yMe < 0 || yMe + size > 720) {
+            left = false;
         }
-        return false;
+        int cont = 0;
+        Rectangle meUp = new Rectangle(xMe, yMe + 1, size, size);
+        Rectangle meDown = new Rectangle(xMe, yMe - 1, size, size);
+        Rectangle meLeft = new Rectangle(xMe - 1, yMe, size, size);
+        Rectangle meRigth = new Rectangle(xMe + 1, yMe, size, size);
+        System.err.println(xPos + " " + yPos);
+        for (int i = 0; i < matrixBlock.length; i++) {
+            for (int j = 0; j < this.matrixBlock[0].length; j++) {
+                Rectangle other = new Rectangle(i * size, j * size, size, size);
+                if (i != xPos && j != yPos) {
+                    if (up && other.intersects(meUp) && !matrixBlock[i][j].getType().equalsIgnoreCase("wall")) {
+                        cont++;
+                    }
+                    if (down && other.intersects(meDown) && matrixBlock[i][j].getType().equalsIgnoreCase("wall")) {
+                        cont++;
+                    }
+                    if (left && other.intersects(meLeft) && matrixBlock[i][j].getType().equalsIgnoreCase("wall")) {
+                        cont++;
+                    }
+                    if (right && other.intersects(meRigth) && matrixBlock[i][j].getType().equalsIgnoreCase("wall")) {
+                        cont++;
+                    }
+                }
+            }
+        }
+        System.err.println(cont);
+        if (cont == 1) {
+            direction = dir;
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public int oposDir(int dir) {
@@ -155,50 +185,6 @@ public abstract class Character extends Thread {
             default:
                 return 2;
         }
-    }
-
-    public void rePos() throws InterruptedException {
-        int xB=currentBlock.getX() * size;
-        int yB=currentBlock.getY() * size;
-        
-        direction=oposDir(direction);
-        switch (direction) {
-            case 1:
-                while (y<yB && crash) {
-                    Thread.sleep(speed);
-                    buff.colisionVs(order);
-                    System.err.println("E1"+order);
-                    y += movement;
-                    
-                }
-                break;
-            case 2:
-                while (x<xB && crash) {
-                    Thread.sleep(speed);
-                    buff.colisionVs(order);
-                    x += movement;
-                  
-                }
-                break;
-            case 3:
-                while (y>yB && crash) {
-                    Thread.sleep(speed);
-                    buff.colisionVs(order);
-                    y -= movement;
-                   
-                }
-                break;
-            case 4:
-                while (x>xB && crash) {
-                    Thread.sleep(speed);
-                    buff.colisionVs(order);
-                    x -= movement;
-                    
-                }
-                break;
-        }
-        crash=false;
-        dirAux=direction;
     }
 
     public String getTipo() {
